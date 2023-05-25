@@ -1,5 +1,6 @@
 package com.example.noteapp.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,14 @@ import com.example.noteapp.databinding.ListItemBinding
 import com.example.noteapp.model.Note
 import kotlin.random.Random
 
-class NotesAdapter(private val context: Context,private val onNoteClicked: (Int) -> Unit,private var listenerNote: NoteClickListener) :
+class NotesAdapter(private val context: Context,
+//                   private var listenerNote: NoteClickListener
+                     private val onNoteClicked : (Note) -> Unit) :
     RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
     private lateinit var binding : ListItemBinding
+    private val noteList = ArrayList<Note>()
+    private val fullList = ArrayList<Note>()
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -52,6 +57,7 @@ class NotesAdapter(private val context: Context,private val onNoteClicked: (Int)
 
         val note = differ.currentList[position]
 
+
         holder.itemView.apply {
             binding.tvNote.text = note.notes
             binding.tvTime.text = note.dates
@@ -59,18 +65,45 @@ class NotesAdapter(private val context: Context,private val onNoteClicked: (Int)
         }
         binding.llCardView.setOnClickListener {
             setOnItemClick { notes ->
-                 notes
+                 onNoteClicked(note)
             }
-            onNoteClicked(position)
-            listenerNote.onLongClicked(note,binding.llCardView)
+//            onNoteClicked(position)
+//            listenerNote.onLongClicked(note,binding.llCardView)
         }
+//        binding.llCardView.setOnLongClickListener{
+//            listenerNote.onLongClicked(note,binding.llCardView)
+//            true
+//        }
     }
 
 
+    private fun updateList(newList : List<Note>){
+
+        fullList.clear()
+        fullList.addAll(newList)
+
+        noteList.clear()
+        noteList.addAll(fullList)
+        notifyDataSetChanged()
+
+    }
+
+    private fun filter(search : String){
+
+        noteList.clear()
+
+        for (item in fullList){
+            if (item.title?.lowercase()?.contains(search) == true){
+                noteList.add(item)
+            }
+        }
+        notifyDataSetChanged()
+    }
     private var onItemClickListener : ((Note) -> Unit) ? =null
     fun setOnItemClick(listener : (Note) -> Unit){
           onItemClickListener =listener
     }
+    @SuppressLint("SuspiciousIndentation")
     private fun randomColor() : Int{
 
       val colorList = ArrayList<Int>()
