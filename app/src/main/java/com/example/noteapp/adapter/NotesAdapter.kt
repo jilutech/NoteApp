@@ -2,6 +2,8 @@ package com.example.noteapp.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,8 +58,6 @@ class NotesAdapter(private val context: Context,
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
 
         val note = differ.currentList[position]
-
-
         holder.itemView.apply {
             binding.tvNote.text = note.notes
             binding.tvTime.text = note.dates
@@ -65,15 +65,10 @@ class NotesAdapter(private val context: Context,
         }
         binding.llCardView.setOnClickListener {
             setOnItemClick { notes ->
-                 onNoteClicked(note)
+                onNoteClicked(note)
             }
-//            onNoteClicked(position)
-//            listenerNote.onLongClicked(note,binding.llCardView)
         }
-//        binding.llCardView.setOnLongClickListener{
-//            listenerNote.onLongClicked(note,binding.llCardView)
-//            true
-//        }
+        binding.llCardView.setCardBackgroundColor(generateRandomColor())
     }
 
 
@@ -87,7 +82,6 @@ class NotesAdapter(private val context: Context,
         notifyDataSetChanged()
 
     }
-
     private fun filter(search : String){
 
         noteList.clear()
@@ -99,6 +93,8 @@ class NotesAdapter(private val context: Context,
         }
         notifyDataSetChanged()
     }
+
+
     private var onItemClickListener : ((Note) -> Unit) ? =null
     fun setOnItemClick(listener : (Note) -> Unit){
           onItemClickListener =listener
@@ -118,6 +114,14 @@ class NotesAdapter(private val context: Context,
         return randomIndex
 
     }
+    fun generateRandomColor(): Int {
+        return Color.rgb(
+            (Math.random() * 256).toInt(),
+            (Math.random() * 256).toInt(),
+            (Math.random() * 256).toInt()
+        )
+    }
+
 
     interface NoteClickListener{
         fun onLongClicked(note: Note,cardView: CardView)

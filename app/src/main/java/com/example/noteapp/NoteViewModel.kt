@@ -21,13 +21,13 @@ class NoteViewModel(application: Application,
     }
     fun getNote()=noteRepository.getAllNote()
 
-    private fun deleteNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
+    fun deleteNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         noteRepository.delete(note)
     }
-    private fun insert(note: Note) = viewModelScope.launch(Dispatchers.IO) {
+    fun insert(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         noteRepository.insert(note)
     }
-    private fun update(note: Note) = viewModelScope.launch(Dispatchers.IO) {
-        noteRepository.update(note)
+    fun update(note: Note) = viewModelScope.launch(Dispatchers.IO) {
+//        noteRepository.update(note)
     }
 }

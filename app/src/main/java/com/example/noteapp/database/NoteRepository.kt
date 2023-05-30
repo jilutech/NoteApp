@@ -10,7 +10,7 @@ class NoteRepository(private var noteDB: NoteDB) {
 
     suspend fun delete(note: Note)=noteDB.getNoteDao().delete(note)
 
-    suspend fun update(note: Note)=noteDB.getNoteDao().update(note.id,note.title,note.notes)
+//    suspend fun update(note: Note)=noteDB.getNoteDao().update(note.id,note.title,note.notes)
 
 
 
